@@ -43,7 +43,6 @@ class _MarkerClusterLayerState extends State<MarkerClusterLayer>
   late AnimationController _centerMarkerController;
   late AnimationController _spiderfyController;
   PolygonLayer? _polygon;
-  final PopupState popupState = PopupState();
 
   _MarkerClusterLayerState();
 
@@ -195,8 +194,8 @@ class _MarkerClusterLayerState extends State<MarkerClusterLayer>
                       ? popupOptions.timeToShowPopupOnHover
                       : 0), () {
               popupOptions.markerTapBehavior.apply(
-                marker.marker,
-                PopupState.maybeOf(context, listen: false) ?? PopupState(),
+                PopupSpec(marker: marker.marker),
+                popupOptions.popupState,
                 popupOptions.popupController,
               );
             })
@@ -524,12 +523,11 @@ class _MarkerClusterLayerState extends State<MarkerClusterLayer>
     final popupOptions = widget.options.popupOptions;
     if (popupOptions != null) {
       layers.add(PopupLayer(
-        popupState: PopupState.maybeOf(context, listen: false) ?? PopupState(),
-        popupBuilder: popupOptions.popupBuilder,
-        popupSnap: popupOptions.popupSnap,
-        popupController: popupOptions.popupController,
-        popupAnimation: popupOptions.popupAnimation,
-        markerRotate: popupOptions.markerRotate,
+        popupDisplayOptions: PopupDisplayOptions(
+          builder: popupOptions.popupBuilder,
+          animation: popupOptions.popupAnimation,
+          snap: popupOptions.popupSnap,
+        ),
       ));
     }
 
@@ -621,8 +619,8 @@ class _MarkerClusterLayerState extends State<MarkerClusterLayer>
       if (widget.options.popupOptions != null) {
         final popupOptions = widget.options.popupOptions!;
         popupOptions.markerTapBehavior.apply(
-          marker.marker,
-          PopupState.maybeOf(context, listen: false) ?? PopupState(),
+          PopupSpec(marker: marker.marker),
+          popupOptions.popupState,
           popupOptions.popupController,
         );
       }

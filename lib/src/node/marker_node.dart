@@ -12,9 +12,6 @@ class MarkerNode extends MarkerOrClusterNode implements Marker {
   Key? get key => marker.key;
 
   @override
-  Anchor get anchor => marker.anchor;
-
-  @override
   WidgetBuilder get builder => marker.builder;
 
   @override
@@ -39,6 +36,8 @@ class MarkerNode extends MarkerOrClusterNode implements Marker {
   Bounds<double> pixelBounds(FlutterMapState map) {
     final pixelPoint = map.project(point);
 
+    final anchor = marker.anchorPos?.anchor ?? Anchor(0, 0);
+
     final rightPortion = width - anchor.left;
     final leftPortion = anchor.left;
     final bottomPortion = height - anchor.top;
@@ -51,4 +50,7 @@ class MarkerNode extends MarkerOrClusterNode implements Marker {
 
     return Bounds(ne, sw);
   }
+
+  @override
+  AnchorPos? get anchorPos => marker.anchorPos;
 }
